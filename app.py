@@ -27,7 +27,6 @@ def foundAboutThisApp():
     for elem in d.xpath("//android.widget.TextView").all():
         print("Text:", elem.text)
         if elem.text == 'About this app':
-          print("Found!!!")
           # click
           elem.click()
           # d.xpath("//*[@text='About this app']").click()

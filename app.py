@@ -1,4 +1,6 @@
 import uiautomator2 as u2
+import time
+
 d = u2.connect() # connect to device
 
 # https://github.com/openatx/uiautomator2
@@ -24,17 +26,20 @@ d = u2.connect() # connect to device
 def foundAboutThisApp():
   loop = 0
   while loop < 10:
+
     for elem in d.xpath("//android.widget.TextView").all():
-        print("Text:", elem.text)
+        # print("Detail Page Text:", elem.text)
         if elem.text == 'About this app':
           # click
           elem.click()
           # d.xpath("//*[@text='About this app']").click()
           return
     loop += 1
-    d(scrollable=True).scroll(steps=100)
 
-def foundAppSize():
+    time.sleep(1)
+    # d(scrollable=True).scroll(steps=100)
+
+def foundAppSize(packageName):
   appSize = ''
   found = False
   loop = 0
@@ -43,14 +48,16 @@ def foundAppSize():
     # scroll to page bottom
     d(scrollable=True).fling.vert.forward()
     for elem in d.xpath("//android.widget.TextView").all():
-        print("Text:", elem.text)
+        # print("Text:", elem.text)
         if elem.text == 'Download Size':
           found = True
         elif found:
           found = False
           split = elem.text.split(' ')
           appSize = split[0]
-          print(split)
+          # print(split)
+          print(packageName + " AppSize: " + elem.text)
+          # d.toast.show(packageName + " AppSize:" + appSize)
           return appSize
     loop += 1
 
@@ -75,6 +82,6 @@ for package in packages:
   foundAboutThisApp()
 
   # found app size
-  foundAppSize()
+  foundAppSize(package)
 
 stopApp()
